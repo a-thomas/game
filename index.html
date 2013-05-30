@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Parlez-vous Android ? Game Development</title>
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/custom.css" id="theme">
+		<link href='http://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<h1>Parlez-vous Android ?</h1>
+					<h3><i class="icon-gamepad"></i> Game Development</h3>
+					<p>
+						<small>By <a href="http://excilys.com/" target="_blank">Excilys</a></small>
+					</p>
+				</section>
+
+				<section>
+					<section>
+						<h1>Alexandre THOMAS</h1>
+						<p><a href="https://twitter.com/aleksthomas" target="_blank">@AleksThomas</a></p>
+						<p><a href="mailto:althomas@excilys.com" target="_blank">althomas@excilys.com</a>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<p>Développeur Android et JEE chez Excilys.</p>
+						<p>Formateur Android.</p>
+					</section>
+					<section>
+						<img src="http://androidkickstartr.com/img/header.png">
+						<a href="http://androidkickstartr.com">http://androidkickstartr.com</a>
+					</section>
+					<section>
+						<h1>AndroidAnnotations</h1>
+						<a href="http://androidannotations.org/">http://androidannotations.org/</a>
+					</section>
+					<section>
+						<h1>Talks</h1>
+						<ul>
+							<li>2012: Devoxx France, Devoxx Anvers, PAUG, Open World Forum.</li>
+							<li>2013: DevConfRussia, DroidCon Paris.</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<h1>Sommaire</h1>
+					<ol>
+						<li class="fragment">Introduction</li>
+						<li class="fragment">Android et les jeux-vidéo</li>
+						<li class="fragment">Graphics</li>
+						<li class="fragment">Multitouch API</li>
+						<li class="fragment">Système de fichiers</li>
+						<li class="fragment">Audio</li>
+						<li class="fragment">Les Bitmaps</li>
+						<li class="fragment">Bonus: Accéléromètre et KeyEvents</li>
+						<li class="fragment">Projet SpaceShip</li>
+					</ol>
+				</section>	
+
+				<section>
+					<section>
+						<h1>Introduction</h1>
+					</section>
+					<section>
+						<img src="http://www.eco-conscient.com/wp-content/uploads/2013/02/gartner-os-smartphone-vente-volume-2011-2013.png">
+					</section>	
+					<section>
+						<img src="http://www.eco-conscient.com/wp-content/uploads/2013/02/gartner-os-smartphone-evolution-part-de-march%C3%A9.png">
+					</section>	
+					<section>
+						<img src="http://www.eco-conscient.com/wp-content/uploads/2012/12/gartner-part-de-marche-bilan-2009-2012.png">
+					</section>	
+					<section>
+						<img src="http://i.imgur.com/MGWYOMy.jpg?1">
+						<p>Publiée par NBC News.</p>
+						<aside class="notes">
+							Publié par NBC News. L'une de 2005 lors des funérailles de Jean-Paul II, l'autre de 2013, pendant la présentation du nouveau pape François.
+						</aside>
+					</section>
+					<section>
+						<img src="http://dnust.com/wp-content/uploads/2012/11/android-phones-tips.jpg">
+						<a href="http://www.android.com/devices/">http://www.android.com/devices/</a>
+						<aside class="notes">
+							Énormément de devices, pas mal de choses à gérer du point de vue du développeur. C'est pas toujours facile.
+							Réel tournant dans le jeu vidéo, démocratisation du jeux vidéo.
+							Révolution du jeux-vidéo...
+						</aside>
+					</section>
+					<section>
+						<img src="http://technology.inquirer.net/files/2012/11/nexus-10.jpg" />
+					</section>
+					<section>
+						<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/7/73/OUYA%E6%9C%AC%E4%BD%93.png/800px-OUYA%E6%9C%AC%E4%BD%93.png">
+						<a href="http://www.ouya.tv/">http://www.ouya.tv/</a>
+					</section>	
+					<section>
+						<img src="http://www.journaldugamer.com/files/2013/05/Loading_screen.png">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1><i class="icon-gamepad"></i> Les jeux vidéos sous Android</h1>
+					</section>
+					<section>
+						<h2>En règle générale,</h2>
+						<ul>
+							<li class="fragment">Une activity</li>
+							<li class="fragment">Une view</li>
+							<li class="fragment">
+								Gestion manuel des changements de configuration
+							</li>
+						</ul>
+						<pre class="fragment" style="width=600px"><code data-trim contenteditable>
+&lt;activity android:name=".MainActivity"
+android:screenOrientation="portrait"
+android:configChanges="keyboard|keyboardHidden|orientation"></code></pre>
+						<aside class="notes">
+							C'est une approche complètement différente du développement d'applications classiques où l'on utiliser les composants (widget) fournis par le framework.
+							En jeux-vidéo, on dessine tout.
+						</aside>
+					</section>
+					<section>
+						<h2>Cycle de vie</h2>
+						<img src="http://developer.android.com/images/activity_lifecycle.png" />
+						<aside class="notes">
+							OnCreate() on l'utilise comme par habitude pour initialiser nos vues, ou pour récupérer les instances des composants graphiques correspondant à nos vues.
+							On vient se rattacher au cycle de vie de l'activity. Les deux seuls callback qui nous intéresse sont onPause() et onResume()
+						</aside>
+					</section>
+					<section>
+						<img src="img/activity_lifecycle.png" />
+						<p>onResume = resume the game</p>
+						<p>onPause = pause the game</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Graphics</h1>
+					</section>
+					<section>
+						<h2>Première méthode</h2>
+						<pre><code data-trim contenteditable>
+public class CustomView extends View {
+    // ...
+ 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        canvas.save();
+ 
+        // make your changes
+        canvas.drawRect(...);
+        canvas.drawPath(...)
+ 
+        canvas.restore();
+    }
+}
+						</code></pre>
+						<p class="fragment"><i class="icon-warning-sign"></i> Important: Le rendu est fait sur l'UIThread.</p>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<h2>La bonne méthode</h2>	
+						<h3>SurfaceView</h3>
+						<br/>
+						<ul>
+							<li>Vue contenant un objet Surface.</li>
+							<li>Permet d'effectuer le rendu sur un thread différent</li>
+							<li>SurfaceHolder</li>
+						</ul>
+						<aside class="notes">
+							La SufaceView perce un trou dans la window dans laquelle elle est contenu pour laisser apparaître l'élément "Surface".
+							On accède à la "Surface" via un SurfaceHolder. 
+							But: créer le rendu de la vue sur un autre thread qui est par défaut effectuer sur le main thread et ainsi gagner en perfs.
+						</aside>
+					</section>
+					<section style="text-align:left;">
+						<h2 style="text-align:center;"><i class="icon-code"></i> Code</h2>
+						<p>Récupérer le canvas utilisé pour dessiner sur la "Surface"</p>
+						<pre><code data-trim contenteditable>
+							Canvas canvas = getHolder().lockCanvas()
+						</code></pre>
+						<p>Affichage de la "Surface" à l'écran</p>
+						<pre><code data-trim contenteditable>
+							getHolder().unlockCanvasAndPost(Canvas canvas)
+						</code></pre>
+						<p>Savoir si la surface est prête</p>
+						<pre><code data-trim contenteditable>
+SurfaceHolder.Callback.surfaceCreated(SurfaceHolder holder)
+SurfaceHolder.Callback.surfaceDestroyed(SurfaceHolder holder)
+						</code></pre>
+						<small>ou</small>
+						<pre><code data-trim contenteditable>
+							boolean isCreated = holder.getSurface().isValid();
+						</code></pre>
+						<br/>
+					</section>	
+					<section>
+						<h1><i class="icon-rocket"></i> Exercice</h1>
+						<p>Relatif au projet "Spaceship" !</p>
+						<br/>
+						<h1><i class="icon-gamepad"></i> Exercice</h1>
+						<p>Exercices d'entraînement.</p>
+					</section>
+					<section>
+						<h1><i class="icon-rocket"></i> Exercice</h1>
+					</section>
+					<section>
+						<h2>Dessiner dans une SurfaceView</h2>
+						<ol>
+							<li>Commencez par créer une nouvelle application Android.</li>
+							<li>Créez une vue custom héritant de <a href="http://developer.android.com/reference/android/view/SurfaceView.html">SurfaceView</a> en partant du code diponible <a href="https://gist.github.com/a-thomas/517c5b57e80f2aa40059" target="_blank">ici</a>.</li>
+							<li>Dessinez une forme (rectangle, cercle, ligne...) afin de vérifier que votre vue est fonctionnelle.</li>
+							<li>Essayez de dessiner un triangle en utilisant un <a href="http://developer.android.com/reference/android/graphics/Path.html">Path</a>.</li>
+						</ol>
+						<p></p>
+						<br/>
+						<br/>
+						<p><i class="icon-warning-sign"></i> N'oubliez pas d'effectuer le rendu dans un autre thread.</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Multitouch API</h1>
+					</section>
+					<section>
+						<h2>uses-feature</h2>
+						<pre><code data-trim contenteditable>
+&lt;uses-feature android:name="android.hardware.touchscreen.multitouch" 
+	android:required="true"/&gt;						
+						</code></pre>
+						<p>Permet de vérifier que le device est compatible.</p>
+
+						<br/>
+						<p>Autres exemples: </p>
+						<pre><code data-trim contenteditable>
+&lt;uses-feature android:name="android.hardware.bluetooth" /&gt;
+&lt;uses-feature android:name="android.hardware.camera" /&gt;
+						</code></pre>
+					</section>
+					<section>
+						<pre><code data-trim contenteditable>
+
+// Récupérer le type d'action
+int action = event.getActionMasked();
+
+// Récupérer l'index
+int actionIndex = event.getActionIndex();
+
+// Récupérer l'id du pointeur
+int pointerId = event.getPointerId(actionIndex);
+						</code></pre>
+						<aside class="notes">
+							Différence entre index et pointeurId. L'index est l'index dans un tableau de données relatif au MotionEvent en cours.
+							Le pointerId identifie un pointeur en particulier. A partir de l'index vous pouvez récupérer l'identifiant du pointeur.
+
+							C'est par le biais de l'index que vous allez pouvoir accéder aux données de l'Event.
+
+							actionIndex = id données du MotionEvent
+							pointerId = id du pointeur
+						</aside>
+						<br/>
+						<p>Actions possibles</p>
+						<pre><code data-trim contenteditable>
+switch (action) {
+	case MotionEvent.ACTION_UP:
+	    // premier touch uniquement
+	case MotionEvent.ACTION_POINTER_UP:
+	    // autres touch
+	case MotionEvent.ACTION_DOWN:
+	    // premier touch uniquement
+	case MotionEvent.ACTION_POINTER_DOWN:
+	    // autres touch
+	case MotionEvent.ACTION_MOVE:
+	    // tous les touch
+}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Versions inférieures à l'api 8</h2>
+						<p>La classe <a href="http://developer.android.com/reference/android/support/v4/view/MotionEventCompat.html" target="_blank">MotionEventCompat</a>, disponible dans la librairie <a href="http://developer.android.com/tools/extras/support-library.html" target="_blank">support-v4</a>, intégre la nouvelle API.</p>
+					</section>
+					<section>
+						<h1><i class="icon-gamepad"></i> Exercice</h1>
+					</section>
+					<section>
+						<h2>Multitouch</h2>
+						<ol>
+							<li>Dessinez autant de cercles qu'il y a de doigts en contact de l'écran.</li>
+							<li>Supprimez-les au fur et à mesure que l'utilisateur enlève ses doigts.</li>
+							<li><strong>Bonus:</strong> faites en sorte que l'utilisateur puisse déplacer les cercles.</li>
+						</ol>
+						<br/>
+						<br/>
+						<p><i class="icon-warning-sign"></i> Veillez à avoir compris la différence entre <em>actionIndex</em> et <em>pointerId</em></p>
+					</section>					
+					<section>
+						<h1><i class="icon-rocket"></i> Exercice</h1>
+					</section>					
+					<section>
+						<h2>Intégrons le multitouch à notre jeu</h2>
+						<ol>
+							<li>Faites en sorte que le triangle avance vers le premier doigt de l'utilisateur.</li>
+							<li>Dessinez un cercle à l'endroit où l'utilisateur posera son 2e doigt.</li>
+						</ol>
+					</section>
+				</section>	
+
+				<section>
+					<section>
+						<h1><i class="icon-file"></i> Système de fichiers</h1>
+					</section>
+					<section>
+						<h2>Les Ressources</h2>
+						<br/>
+						<ul>
+							<li>Ressources du dossier <em>res/</em>: layout, values, animator, anim, drawables...</li>	
+							<li>Assets</li>	
+						</ul>
+					</section>
+					<section>
+						<h2>Les Assets</h2>
+						<br/>
+						<ol>
+							<li>Bien plus flexible.</li>
+							<li>Liberté des sous-dossiers.</li>
+						</ol>
+						<pre style="width:200px" ><code data-trim contenteditable>
+Your project/
+|_ assets/
+   |_music/
+   |_bfx/
+   |_image/
+|_src/
+|_res/
+					</code></pre>
+						<aside class="notes">
+							Susceptible d'avoir un paquet de fichiers pour tout ce qui est images / music / sons. Il est nécessaire de travailler avec une hiérarchie de dossier bien organisé.
+							Le système de ressources de base ne permet pas cette flexibilité.
+
+							Res folder:
+							si dossier pas supporté -> compile error
+							placer des fichiers ressources dans un sous-dossier d'un dossier de ressources (layout ou autre) => dossier ignoré mais pas de compile errors
+
+							Assets => flexibilité
+						</aside>
+					</section>
+					<section>
+						<h2><i class="icon-code"></i> Code</h2>
+						<pre><code data-trim contenteditable>
+try {
+    // à partir d'un Context on récupère l'AssetManager
+    AssetManager assetManager = getAssets();
+
+    // plusieurs méthodes à disposition pour charger un fichier 
+    InputStream inputStream = assetManager.open("dir1/file_name");
+    AssetFileDescriptor fd = assetManager.openFd("dir1/file_name");
+
+} catch (IOException e) {
+    Log.e(TAG, "problem during files loading", e);
+}</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1><i class="icon-music"></i> Audio</h1>
+					</section>
+					<section>
+						<h2>Types de STREAM</h2>
+						<br/>
+						<ul>
+							<li>STREAM_TYPE = flux</li>
+							<li>VOICE_CALL, MUSIC, NOTIFICATIONS...</li>
+							<br/>
+							<li>Contrôle du volume: <pre><code data-trim contenteditable>Activity.setVolumeControlStream (int streamType)</pre></code></li>
+						</ul>
+						<aside class="notes">
+							Flux sur lequel une application peut diffuser du son. Différencier les différents type de son.
+							Sonnerie ? Voix ? Musique ? Notifications etc...
+						</aside>
+					</section>
+					<section>
+						<h2>Musique de fond</h2>
+						<p>On va utiliser le MediaPlayer.</p>
+
+						<pre><code data-trim contenteditable>
+try {
+    // on set le fichier audio
+    mediaPlayer.setDataSource(...);
+
+    // on prépare l'audio
+    mediaPlayer.prepare();
+
+    // on commence à jouer l'audio
+    mediaPlayer.start();
+    mediaPlayer.pause();
+    mediaPlayer.stop();
+
+} catch (IOException e) {
+    Log.e(TAG, "Problem during audio loading", e);
+}
+						</code></pre>
+					</section>
+					<section>
+						<img src="http://developer.android.com/images/mediaplayer_state_diagram.gif"/>
+						<br/>
+						<a href="http://developer.android.com/reference/android/media/MediaPlayer.html">Documentation</a>
+					</section>					
+					<section>
+						<h2>Sound effects</h2>
+						<p>Besoin de jouer plusieurs son rapidement et simultanément.</p>
+					</section>
+					<section style="text-align:left">
+						<h2 style="text-align:center">SoundPool</h2>
+						<ul>
+							<li>Chargement en mémoire,</li>
+							<li>Peu de latence,</li>
+							<li>Jouer simultanément.</li>
+						</ul>
+						<pre><code data-trim contenteditable>
+// Création d'un SoundPool
+// 10 = nb max de sons joués simultanément
+// STREAM_MUSIC = type de stream sur lequel seront joué les sons
+SoundPool soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, O);
+AssetFileDescriptor fd = assetManager.openFd("path_to_the_file");
+
+// pré-charge le son
+sound1 = soundPool.load(fd, 1);
+
+// ...
+
+// on joue le son correspondant à l'ID donné
+soundPool.play(sound1, 1, 1, 0, 0, 1);
+						</code></pre>
+					</section>
+					<section>
+						<h1><i class="icon-rocket"></i> Exercice</h1>
+					</section>
+					<section>
+						<h2>Faites du bruit !</h2>
+						<ol>
+							<li>Créer une nouvelle classe <em>SoundFXManager</em> pour charger/jouer vos sons SFX.</li>
+							<li>Créer une nouvelle classe <em>MusicPlayer</em>, responsable de jouer la musique de fond.</li>
+						</ol>
+						<br/>
+						<br/>
+						<p><a href="http://www.bfxr.net/" target="_blank">bfxr.net</a>, pour générer des sons de jeux en ligne.</p>
+						<p><a href="http://dig.ccmixter.org/music_for_games?dig-lic=safe&dig-query=space" target="_blank">dig.ccmixter.org</a>, pour télécharger des musiques de jeux libres de droit.</p>
+					</section>
+					<section>	
+						<h2>Audio Focus</h2>
+						<p>Être un bon citoyen Android</p>
+						<pre style="font-size:16px;"><code data-trim contenteditable>
+AudioManager am = ...;
+
+// On demande le focus de l'audio
+am.requestAudioFocus(AudioManager.OnAudioFocusChangeListener l, int streamType, ...);
+
+// On restitue le focus de l'audio
+am.abandonAudioFocus(AudioManager.OnAudioFocusChangeListener l);
+						</code></pre>
+					</section>
+					<section>
+						<h2><i class="icon-code"></i> Code</h2>
+						<pre style="font-size:16px;"><code data-trim contenteditable>
+
+// AudioManager.OnAudioFocusChangeListener
+@Override
+public void onAudioFocusChange(int focusChange) {
+    if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+        // Récupération du son suite à une perte
+        // on continue de jouer si on revient d'une pause
+        // ou on rejoue le son depuis le début si c'était un stop
+        // ou encore on restitue le niveau de volume
+        // tout dépend du type de AUDIOFOCUS_LOSS
+    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+        // perte de l'audio focus pour une longue durée
+        // mettre en stop
+    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+        // perte de l'audio focus pour une petite durée
+        // mettre en pause
+    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+        // perte de l'audio focus pour une petite durée et 
+        // possibilité de jouer un son en même temps
+        // Baisser le volume
+    }
+}
+						</code></pre>
+					</section>
+				</section>	
+
+				<section>
+					<section>
+						<h1>Les bitmaps</h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Accéléromètre et Key events</h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Projet Spaceship <i class="icon-rocket"></i></h1>
+					</section>
+				</section>
+
+				<section>
+					<h1>THE END</h1>
+					<h3>Merci pour votre attention</h3>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
