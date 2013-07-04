@@ -528,17 +528,60 @@ public void onAudioFocusChange(int focusChange) {
 					<section>
 						<h1>Les bitmaps</h1>
 					</section>
+					<section>
+						<h2>Créer un bitmap</h2>
+						<pre style="font-size:16px;"><code data-trim contenteditable>
+BitmapFactory.decodeFile("path_name");
+//...
+BitmapFactory.decodeFileDescriptor(aFileDescriptor);
+//...
+BitmapFactory.decodeResource(res, R.drawable.my_bitmap);
+						</code></pre>
+					</section>		
+					<section>
+						<h2>Dessiner un bitmap</h2>
+						<p>Utiliser le canvas!</p>
+						<pre style="font-size:16px;"><code data-trim contenteditable>
+// Dessiner un bitmap
+Canvas.drawBitmap(...);
+						</code></pre>
+					</section>
+					<section>
+						<h2>Libérer un bitmap</h2>
+						<p>Versions inférieures à Honeycomb 3.0 (Api 11)</p>
+						<p>Quand un Bitmap est inutilisé -> Bitmap.recycle()</p>
+						<p><i class="icon-warning-sign"></i> Native heap vs Dalvik's heap.</p>
+					</section>
+					<section>
+						<h2>Recycler un bitmap</h2>
+						<p>Depuis Honeycomb: on peut recycler un bitmap.</p>
+						<pre style="font-size:16px;"><code data-trim contenteditable>
+BitmapFactory.Options options = new BitmapFactory.Options();
+options.inBitmap = recycledBitmap;
+// ...
+BitmapFactory.decodeFile("my_file_path", options);
+// ou
+BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
+// ...
+						</code></pre>
+					</section>
+					<section>
+						<h1><i class="icon-rocket"></i> Exercice</h1>
+						<p>Ajouter des images.</p>
+						<p><a href="http://opengameart.org/" target="_blank">http://opengameart.org/</a></p>
+						<p><a href="http://www.cgtextures.com/" target="_blank">http://www.cgtextures.com/</a></p>
+						<p><a href="http://untamed.wild-refuge.net/rmxpresources.php?characters" target="_blank">http://untamed.wild-refuge.net/rmxpresources.php?characters</a></p>
+						<p><a href="http://www.lostgarden.com/" target="_blank">http://www.lostgarden.com/</a></p>
+					</section>
 				</section>
-
 				<section>
 					<section>
-						<h1>Accéléromètre et Key events</h1>
+						<h1>Accéléromètre et Key events (Facultatif)</h1>
 					</section>
 				</section>
 
 				<section>
 					<section>
-						<h1>Projet Spaceship <i class="icon-rocket"></i></h1>
 					</section>
 				</section>
 
